@@ -1,4 +1,5 @@
 require_relative 'node'
+require 'pry-byebug'
 
 class Tree
   def initialize(array)
@@ -25,7 +26,6 @@ class Tree
   end
   
   def insert(value, node = @root)
-    # just insert left or right depending on number
     return if value == node.data
 
     if value < node.data
@@ -34,8 +34,80 @@ class Tree
       node.right.nil? ? node.right = Node.new(value) : insert(value, node.right)
     end
   end
+
+  def delete(value, node = @root)
+    return node if node.nil?
+
+    if value < node.data
+      node.left = delete(value, node.left)
+      return node # return the node to make sure the left node remains unchanged
+    elsif value > node.data
+      node.right = delete(value, node.right)
+      return node
+    end
+
+    if node.right.nil?
+      node = node.left
+    elsif node.left.nil?
+      node = node.right
+    else
+      parent = node
+      child = node.right
+      until child.left.nil?
+        parent = child
+        child = parent.left
+      end
+      if parent.data != node.data
+        parent.left = child.right
+      else
+        node.right = child.right
+      end
+      node.data = child.data
+      child = nil
+    end
+    node # return the value of the node in the method call
+  end
+
+  def find(value, node = @root)
+    return node if node.data == value
+
+    value < node.data ? find(value, node.left) : find(value, node.right)
+  end
+
+  def level_order(node = @root)
+    return if node.nil?
+
+    array = []
+    queue = [node]
+    until queue.compact.empty?
+      if block_given?
+        yield queue.first
+      else
+        array << queue.first.data
+      end
+
+      queue << queue.first.left unless node.left.nil?
+      queue << queue.first.right unless node.right.nil?
+      queue.shift
+    end
+    array
+  end
+
+  def inorder(node = @root)
+    # LIFO
+    # yield to block
+    # left subtree -> root -> right subtree
+    # insert into stack is right, root, left
+    # stack or recursion
+    return if node.nil?
+
+    inorder(node.left)
+    yield node
+    inorder(node.right)
+  end
 end
 
-list = Tree.new([1,2,3,4,5,6,7,8,9])
-list.insert(10)
-list.pretty_print
+list = Tree.new([1,2,3,4,5,6,7])
+list.inorder { |num| num.data * 2 }
+
+# Try level order recursion
