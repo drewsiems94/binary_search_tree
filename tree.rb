@@ -93,7 +93,7 @@ class Tree
     array
   end
 
-  # The method needs the block each time you call it
+  # The method needs the block each time you call it (recursion)
   def inorder(node = @root, arr = [], &block)
     return if node.nil?
 
@@ -108,11 +108,45 @@ class Tree
   end
 
   def preorder(node = @root)
+    return if node.nil?
 
+    arr = []
+    stack = [node]
+    until stack.empty?
+      if block_given?
+        yield stack[-1]
+      else
+        arr << stack[-1].data
+      end
+      stack.pop
+      stack << node.right unless node.right.nil?
+      stack << node.left unless node.left.nil?
+    end
+    arr
+  end
+
+  def postorder(node = @root, arr = [], &block)
+    # left, right, node
+    return if node.nil?
+
+    postorder(node.left, arr, &block)
+    postorder(node.right, arr, &block)
+    if block_given?
+      block.call(node)
+    else
+      arr << node.data
+    end
+    arr
+  end
+
+  def height(node)
+    return 0 if @root.data = node
+
+    
   end
 end
 
 list = Tree.new([1,2,3,4,5,6,7])
-p list.inorder 
+print list.postorder
 
 # Try level order recursion
