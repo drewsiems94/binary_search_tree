@@ -93,21 +93,26 @@ class Tree
     array
   end
 
-  def inorder(node = @root)
-    # LIFO
-    # yield to block
-    # left subtree -> root -> right subtree
-    # insert into stack is right, root, left
-    # stack or recursion
+  # The method needs the block each time you call it
+  def inorder(node = @root, arr = [], &block)
     return if node.nil?
 
-    inorder(node.left)
-    yield node
-    inorder(node.right)
+    inorder(node.left, arr, &block)
+    if block_given?
+      block.call(node)
+    else
+      arr << node.data
+    end
+    inorder(node.right, arr, &block)
+    arr
+  end
+
+  def preorder(node = @root)
+
   end
 end
 
 list = Tree.new([1,2,3,4,5,6,7])
-list.inorder { |num| num.data * 2 }
+p list.inorder 
 
 # Try level order recursion
