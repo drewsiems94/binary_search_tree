@@ -1,5 +1,4 @@
 require_relative 'node'
-require 'pry-byebug'
 
 class Tree
   def initialize(array)
@@ -180,26 +179,40 @@ end
 # Driver code
 
 tree = Tree.new(Array.new(15) { rand(1..100) })
+
 tree.pretty_print
+
 puts tree.balanced?
+
 print tree.level_order
+
 print tree.inorder
+
 print tree.preorder
+
 print tree.postorder
+
 tree.insert(101)
 tree.insert(189)
 tree.insert(164)
 tree.insert(194)
 tree.insert(103)
 tree.insert(199)
-tree.pretty_print
-puts tree.balanced?
-tree.rebalance
-puts tree.balanced?
-tree.pretty_print
-print tree.level_order
-print tree.inorder
-print tree.preorder
-print tree.postorder
 
-# Try level order recursion
+tree.pretty_print
+
+puts tree.balanced?
+
+tree.rebalance
+
+puts tree.balanced?
+
+tree.pretty_print
+
+print tree.level_order
+
+print tree.inorder
+
+print tree.preorder
+
+print tree.postorder
