@@ -139,14 +139,46 @@ class Tree
     arr
   end
 
-  def height(node)
-    return 0 if @root.data = node
+  def height(value)
+    node = self.find(value)
+    count_left = 0
+    count_right = 0
+    return 0 if node.left.nil? && node.right.nil?
 
-    
+    until node.left.nil? && node.right.nil?
+      if node.left.nil?
+        node = node.right
+        count_right += 1
+      elsif node.right.nil?
+        node = node.left
+        count_left += 1
+      else
+
+      end
+    end
+  end
+
+  def depth(value)
+    node = @root
+    depth = 0
+    return 0 if value == node.data
+
+    until node.data == value
+      if value < node.data
+        depth += 1
+        node = node.left
+      else
+        depth += 1
+        node = node.right
+      end
+    end
+    depth
   end
 end
 
 list = Tree.new([1,2,3,4,5,6,7])
-print list.postorder
+list.insert(10)
+list.pretty_print
+puts list.depth(3)
 
 # Try level order recursion
