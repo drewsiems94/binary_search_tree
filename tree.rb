@@ -85,10 +85,10 @@ class Tree
       else
         array << queue.first.data
       end
-
-      queue << queue.first.left unless node.left.nil?
-      queue << queue.first.right unless node.right.nil?
+      node = queue.first
       queue.shift
+      queue << node.left unless node.left.nil?
+      queue << node.right unless node.right.nil?
     end
     array
   end
@@ -112,12 +112,13 @@ class Tree
 
     arr = []
     stack = [node]
-    until stack.empty?
+    until stack.compact.empty?
       if block_given?
         yield stack[-1]
       else
         arr << stack[-1].data
       end
+      node = stack[-1]
       stack.pop
       stack << node.right unless node.right.nil?
       stack << node.left unless node.left.nil?
@@ -176,14 +177,29 @@ class Tree
   end
 end
 
-list = Tree.new([1,2,3,4,5,6,7])
-list.insert(10)
-list.insert(11)
-list.pretty_print
-puts list.balanced?
-list.rebalance
-puts list.balanced?
-list.pretty_print
+# Driver code
 
+tree = Tree.new(Array.new(15) { rand(1..100) })
+tree.pretty_print
+puts tree.balanced?
+print tree.level_order
+print tree.inorder
+print tree.preorder
+print tree.postorder
+tree.insert(101)
+tree.insert(189)
+tree.insert(164)
+tree.insert(194)
+tree.insert(103)
+tree.insert(199)
+tree.pretty_print
+puts tree.balanced?
+tree.rebalance
+puts tree.balanced?
+tree.pretty_print
+print tree.level_order
+print tree.inorder
+print tree.preorder
+print tree.postorder
 
 # Try level order recursion
