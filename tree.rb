@@ -163,12 +163,27 @@ class Tree
     end
     depth
   end
+
+  def balanced?
+    (height(@root.left.data) - height(@root.right.data)).abs > 1 ? false : true
+  end
+
+  def rebalance
+    return if self.balanced?
+
+    arr = self.inorder
+    @root = build_tree(arr)
+  end
 end
 
 list = Tree.new([1,2,3,4,5,6,7])
 list.insert(10)
+list.insert(11)
 list.pretty_print
-puts list.height(4)
+puts list.balanced?
+list.rebalance
+puts list.balanced?
+list.pretty_print
 
 
 # Try level order recursion
